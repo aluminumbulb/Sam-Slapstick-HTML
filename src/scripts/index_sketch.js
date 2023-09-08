@@ -7,15 +7,15 @@ function setup() {
   createDoor();
 }
 
+function draw() {
+  click.debugDraw();
+}
+
 function mousePressed(){
     if(click.checkClicked(mouseX, mouseY)){
         //written assuming index location
         click.exitTo("/src/pages/example_p5.html");
     }
-}
-
-function draw() {
-  click.debugDraw();
 }
 
 //hypothetical utility function

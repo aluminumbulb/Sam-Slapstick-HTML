@@ -21,7 +21,10 @@ class Clickable{
     }
  
     debugDraw = function(){
+        Push()
+        fill
         ellipse(this.x, this.y, this.r, this.r);
+
     }
 }
 
