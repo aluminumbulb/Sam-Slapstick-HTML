@@ -1,21 +1,29 @@
 "use strict";
 
-let click = new Exit(50,50,100);
 let cX = window.innerWidth, cY=400;
+
+//----Object References
+let listeners = [];
+
 function setup() {
   let can = createCanvas(cX, cY);
-  createDoor();
+  drawVisuals();
+  drawFunctionals();
 }
 
 function draw() {
-  click.debugDraw();
+  listeners.forEach((listener)=>listener.debugDraw());
 }
 
 function mousePressed(){
-    if(click.checkClicked(mouseX, mouseY)){
-        //written assuming index location
-        click.exitTo("/src/pages/example_p5.html");
-    }
+  
+    listeners.forEach(
+      (listener)=>{
+        if(listener.recieveClickAt(mouseX, mouseY)){
+          
+        }
+      }
+    )
 }
 
 //hypothetical utility function
@@ -25,10 +33,32 @@ function checkForRefresh(){
     }
 }
 
+//-----VISUALS-------
+
+function drawVisuals(){
+  createDoor();
+}
+
 function createDoor(){
-  let dX = 200, dY=height
+  const dX = 200, dY=height;
   rect((cX-dX)/2, (cY-dY)/2, dX, dY);
-  let kX = 70, kY=50;
+  const kX = 70, kY=50;
   circle(kX+width/2, kY+dY/2, 50);
-  let wX = 0, wY = 0;
+  //window
+  const wW = 150, wH = 120, wX = (width-wW)/2, wY = 50 ;
+  rect( wX, wY, wW, wH);
+}
+
+//-----FUNCTIONALS---
+function drawFunctionals(){
+  //knob exit
+  const kX = 70, kY=50;
+  const dX = 200, dY=height;
+  let knob = new ClickableCircumference(kX+width/2, kY+dY/2, 50, "knob");
+  listeners.push(knob);
+
+  //window exit
+  const wW = 150, wH = 120, wX = (width-wW)/2, wY = 50 ;
+  let window = new ClickableArea(wX, wY, wW, wH, "window");
+  listeners.push(window);
 }
