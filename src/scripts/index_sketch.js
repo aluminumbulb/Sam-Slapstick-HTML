@@ -12,20 +12,23 @@ function setup() {
 }
 
 function draw() {
-  listeners.forEach((listener)=>listener.debugDraw());
+  if (debugMode){
+    listeners.forEach((listener)=>listener.debugDraw());
+  }
 }
 
 function mousePressed(){
-  
-    listeners.forEach(
-      (listener)=>{
-        if(listener.recieveClickAt(mouseX, mouseY)){
-          
-        }
-      }
-    )
+  listenerCheck();
 }
 
+function listenerCheck()
+{
+  listeners.forEach(
+    (listener)=>{
+      listener.checkClicked(mouseX, mouseY)
+    }
+  )
+}
 //hypothetical utility function
 function checkForRefresh(){
     if(windowResized()){
@@ -54,11 +57,18 @@ function drawFunctionals(){
   //knob exit
   const kX = 70, kY=50;
   const dX = 200, dY=height;
-  let knob = new ClickableCircumference(kX+width/2, kY+dY/2, 50, "knob");
+  let knob = new ClickableCircumference(kX+width/2, kY+dY/2, 50, "knob", 
+  ()=>{exitTo('src/pages/home_page.html')});
   listeners.push(knob);
 
   //window exit
   const wW = 150, wH = 120, wX = (width-wW)/2, wY = 50 ;
   let window = new ClickableArea(wX, wY, wW, wH, "window");
   listeners.push(window);
+}
+
+//------UTILITY FUNCTIONS-------
+function exitTo(relativePath){
+  if(typeof relativePath == 'string')
+      document.location.href = relativePath;
 }

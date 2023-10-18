@@ -1,38 +1,53 @@
+/*const ClickableTypes = {Default: 0, 
+                        Circular: 1, 
+                        Rectancular: 2};
+*/
+
+/*
+Defines the Clickable Class, and its children.
+Intended for use as a basic form of click-handling in defined areas
+*/
 class Clickable{
-
-    constructor(x, y, id = "Clickable Object", resp){
-        this.x = x;
-        this.y = y;
-        this.id = id;
-        this.resp = resp;
+    constructor(x, y, id = "Clickable Object", action){
+        
+        this.x = x;//int
+        this.y = y;//int
+        this.id = id;//str
+        this.action = action //a function to be performed on a successful click
+        this.clicked = 0;//int
     }
 
-    recieveClickAt(x, y){
-        if(this.checkClicked(x, y)){
-            return true;
-        }
-    }
-
-    //placeholder, doesn't make sense 
+    //Checks to see if coordinates are within the area
+    //Clickable parent considered to have area = 0
     checkClicked(mx, my){
         if(mx==this.x && my==this.y){
+
+            this.performAction();
+            clicked+=1;
+            this.clicked=true;
+            
             return true;
         }
 
         return false;
     }
 
+    performAction(){
+        //check to ensure action
+        console.log("action performed from ", this.id,
+        " action is of type ", typeof this.action);
+        
+        if(typeof this.action == "function"){
 
-    exitTo = function(relativePath){
-        if(typeof relativePath == 'string')
-            document.location.href = relativePath;
-        //send user to desired page
+            //ACTION INPUT DEFINED HERE it will not vary otherwise
+            this.action();
+        }
     }
 }
 
 class ClickableArea extends Clickable{
-    constructor(x, y, w, h, id, resp){
-        super(x, y, id, resp);
+    constructor(x, y, w, h, id, action){
+        super(x, y, id, action);
         this.w = w;
         this.h = h;
         this.r = 0;
@@ -49,20 +64,26 @@ class ClickableArea extends Clickable{
         pop();
     }
 
-    //mx,my = mouse x and y coord resp.
+    
     checkClicked(mx, my){
         if(mx>this.x&&mx<this.x+this.w){
             if(my>this.y&&my<this.y+this.h){
-                console.log(this.id+" clicked");
+                
+                this.performAction();
+                
+                this.clicked += 1;
+                console.log(this.id+" clicked: "+this.clicked+" times");
+                
                 return true;
             }
-        }c  
+        }  
     }
 }
 
 class ClickableCircumference extends Clickable{
-    constructor(x, y, r, id, resp){
-        super(x, y, id, resp);
+    constructor(x, y, r, id, action){
+        
+        super(x, y, id, action);
         this.r = r;
     }
 
@@ -77,9 +98,15 @@ class ClickableCircumference extends Clickable{
         pop();
     }
 
+    
     checkClicked(mx, my){
         if(dist(mx,my, this.x, this.y) < this.r){
-            console.log(this.id+" clicked");
+
+            super.performAction();
+            
+            this.clicked += 1;
+            console.log(this.id+" clicked: "+this.clicked+" times");
+            
             return true;
         }
     }
